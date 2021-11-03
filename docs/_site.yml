@@ -1,5 +1,5 @@
 name: "GIS_workshop"
-output_dir: "docs"
+output_dir: "."
 navbar:
   title: "GIS Workshop"
   left:
