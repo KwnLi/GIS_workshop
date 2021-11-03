@@ -1,0 +1,8 @@
+name: "GIS_workshop"
+navbar:
+  title: "GIS Workshop"
+  left:
+  - text: "Home"
+    href: index.html
+  - text: "01-GPS"
+    href: 01-GPS.html
