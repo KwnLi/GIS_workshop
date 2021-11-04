@@ -4,30 +4,58 @@ title: "Download GPS data and make a map"
 
 ## Basic concepts behind GPS
 
-GPS works by estimating distances from satellites. 
+### How it works
 
-## GPS formats
+GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.
+
+### Coordinate systems
+
+```{r images, echo=FALSE}
+# Define variable containing url
+url1 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-88C05D5F-BFAA-42D5-8D4F-2D6014CFC5CB-web.gif"
+
+url2 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-0921FD4E-B619-491B-92C2-38B70E231948-web.gif"
+```
+
+GPS collects vector data, which is based on points defined in 2 or 3 dimensions. A lot of times you will see the geographic coordinate system used, which actually is defining location on a sphere. 
+
+<center><img src="`r url1`"></center>
+
+The x direction (longitude) is defined by the angle of a vertical slice of Earth from the prime meridian, which runs through Greenwich, England. The y direction (latitude) is a horizontal slice defined by the angle from the equator.
+
+<center><img src="`r url2`"></center>
+
+But there isn't just one coordinate system, so it's important to know what coordinate system you are using when you have geographic location data. Typically, if you are downloading a GIS file, this information is built in.
+
+
+### GPS formats
 
 Some file formats you may encounter when dealing with data from a GPS:
 
-*.gpx* Most of the standalone recreational GPS units (e.g. Garmin) that I've encountered allow you to download gpx files. GaiaGPS also exports into this format.
+**.gpx** Most of the standalone recreational GPS units (e.g. Garmin) that I've encountered allow you to download gpx files. GaiaGPS also exports into this format.
 
-*.kml or .kmz* This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format
+**.kml or .kmz** This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format
 
-*geoJSON* This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.
+**geoJSON** This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.
 
 All these formats can be read into r or QGIS.
 
 Another file format you may encounter are "shapefiles", which originated from ESRI. They do not come as as a single file and instead are several associated files that must be kept together otherwise the data will "break". This makes them harder to deal with. Recreational GPS's and GaiaGPS don't usually deal with shapefiles but you often encounter them when dealing with GIS data.
 
+## Download GPS data
 
+You can find example GPS data here:
+
+### Using r
 
 ```{r libraries, message=FALSE}
 library(sf)
 
 ```
 
-## Using QGIS for GPS import
+### Using QGIS for GPS import
+
+Alternatively, you can use QGIS to import the data.
 
 https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html
 
@@ -36,3 +64,7 @@ https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html
 Mapping guide (start at 7): https://www.qgistutorials.com/en/docs/3/making_a_map.html
 
 Options for basemaps: https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30
+
+
+## References
+https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/
