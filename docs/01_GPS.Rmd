@@ -46,10 +46,53 @@ Another file format you may encounter are "shapefiles", which originated from ES
 
 You can find example GPS data here:
 
+[GPX points](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/Waypoints_31-MAR-21.gpx)
+
+[GPX track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.gpx)
+
+[kml track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.kml)
+
+[geoJSON track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.geojson)
+
 ### Using r
 
+These GPS data can be loaded into r using the `sf` package. To install this package, you have to install some other stuff first. There are instructions here: https://r-spatial.github.io/sf/
+
+Alternatively, you can use the package `plotKML`.
+
 ```{r libraries, message=FALSE}
+# install.packages("plotKML")  # run this to install the package
 library(sf)
+library(plotKML)
+
+```
+
+GPX files contain multiple kinds of geographic data (points, lines, polygons). Most GIS software only deals with one kind at a time. This is the case with the `sf` package but not `plotKML`.
+
+In the `sf` package, running the function `st_layers` will let you peak at what kind of data is hiding in a file. You can then read in the data with `st_read`. To get to the coordinate information, use the function `st_coordinates`
+
+```{r sf_load_data, message = FALSE}
+# You can explore the contents of the file first with `st_layers`
+st_layers("../data/gps/cp.geojson") # only one type of data
+st_layers("../data/gps/cp.gpx")     # contains multiple layers (points, line string, etc.)
+
+# run `st_read` to read in the data. Use the ``layer` argument to specify the layer name
+
+tracks <- st_read("../data/gps/cp.gpx", layer = "tracks")
+points <- st_read("../data/gps/Waypoints_31-MAR-21.gpx", layer = "waypoints")
+
+# how to get the coordinate information
+points_coord <- st_coordinates(points)
+
+```
+
+Alternatively, you can use `readGPX` from the package `plotKML`
+
+```{r plotKML_load_data, message = FALSE}
+
+tracks2 <- readGPX("../data/gps/cp.gpx")
+
+tracks$tracks # in this case, the data are buried in a list of dataframes but it includes the coordinates
 
 ```
 
@@ -61,10 +104,24 @@ https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html
 
 ## Making Maps
 
+### QGIS
+
+Making maps is probably easiest in QGIS.
+
 Mapping guide (start at 7): https://www.qgistutorials.com/en/docs/3/making_a_map.html
 
 Options for basemaps: https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30
 
+### R
+
+If you use `sf`, you can plot the imported data with the package `ggplot2`.
+
+```{r plot_sf}
+library(ggplot2)
+
+ggplot(tracks) + geom_sf()
+
+```
 
 ## References
 https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/

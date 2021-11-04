@@ -266,26 +266,116 @@ $(document).ready(function () {
 
 <div id="basic-concepts-behind-gps" class="section level2">
 <h2>Basic concepts behind GPS</h2>
-<p>GPS works by estimating distances from satellites.</p>
+<div id="how-it-works" class="section level3">
+<h3>How it works</h3>
+<p>GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.</p>
 </div>
-<div id="gps-formats" class="section level2">
-<h2>GPS formats</h2>
+<div id="coordinate-systems" class="section level3">
+<h3>Coordinate systems</h3>
+<p>GPS collects vector data, which is based on points defined in 2 or 3 dimensions. A lot of times you will see the geographic coordinate system used, which actually is defining location on a sphere.</p>
+<center>
+<img src="https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-88C05D5F-BFAA-42D5-8D4F-2D6014CFC5CB-web.gif">
+</center>
+<p>The x direction (longitude) is defined by the angle of a vertical slice of Earth from the prime meridian, which runs through Greenwich, England. The y direction (latitude) is a horizontal slice defined by the angle from the equator.</p>
+<center>
+<img src="https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-0921FD4E-B619-491B-92C2-38B70E231948-web.gif">
+</center>
+<p>But there isn’t just one coordinate system, so it’s important to know what coordinate system you are using when you have geographic location data. Typically, if you are downloading a GIS file, this information is built in.</p>
+</div>
+<div id="gps-formats" class="section level3">
+<h3>GPS formats</h3>
 <p>Some file formats you may encounter when dealing with data from a GPS:</p>
-<p><em>.gpx</em> Most of the standalone recreational GPS units (e.g. Garmin) that I’ve encountered allow you to download gpx files. GaiaGPS also exports into this format.</p>
-<p><em>.kml or .kmz</em> This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format</p>
-<p><em>geoJSON</em> This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.</p>
+<p><strong>.gpx</strong> Most of the standalone recreational GPS units (e.g. Garmin) that I’ve encountered allow you to download gpx files. GaiaGPS also exports into this format.</p>
+<p><strong>.kml or .kmz</strong> This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format</p>
+<p><strong>geoJSON</strong> This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.</p>
 <p>All these formats can be read into r or QGIS.</p>
 <p>Another file format you may encounter are “shapefiles”, which originated from ESRI. They do not come as as a single file and instead are several associated files that must be kept together otherwise the data will “break”. This makes them harder to deal with. Recreational GPS’s and GaiaGPS don’t usually deal with shapefiles but you often encounter them when dealing with GIS data.</p>
-<pre class="r"><code>library(sf)</code></pre>
 </div>
-<div id="using-qgis-for-gps-import" class="section level2">
-<h2>Using QGIS for GPS import</h2>
+</div>
+<div id="download-gps-data" class="section level2">
+<h2>Download GPS data</h2>
+<p>You can find example GPS data here:</p>
+<p><a href="https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/Waypoints_31-MAR-21.gpx">GPX points</a></p>
+<p><a href="https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.gpx">GPX track</a></p>
+<p><a href="https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.kml">kml track</a></p>
+<p><a href="https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.geojson">geoJSON track</a></p>
+<div id="using-r" class="section level3">
+<h3>Using r</h3>
+<p>These GPS data can be loaded into r using the <code>sf</code> package. To install this package, you have to install some other stuff first. There are instructions here: <a href="https://r-spatial.github.io/sf/" class="uri">https://r-spatial.github.io/sf/</a></p>
+<p>Alternatively, you can use the package <code>plotKML</code>.</p>
+<pre class="r"><code># install.packages(&quot;plotKML&quot;)  # run this to install the package
+library(sf)
+library(plotKML)</code></pre>
+<p>GPX files contain multiple kinds of geographic data (points, lines, polygons). Most GIS software only deals with one kind at a time. This is the case with the <code>sf</code> package but not <code>plotKML</code>.</p>
+<p>In the <code>sf</code> package, running the function <code>st_layers</code> will let you peak at what kind of data is hiding in a file. You can then read in the data with <code>st_read</code>. To get to the coordinate information, use the function <code>st_coordinates</code></p>
+<pre class="r"><code># You can explore the contents of the file first with `st_layers`
+st_layers(&quot;../data/gps/cp.geojson&quot;) # only one type of data</code></pre>
+<pre><code>## Driver: GeoJSON 
+## Available layers:
+##   layer_name        geometry_type features fields
+## 1         cp 3D Multi Line String        1     38</code></pre>
+<pre class="r"><code>st_layers(&quot;../data/gps/cp.gpx&quot;)     # contains multiple layers (points, line string, etc.)</code></pre>
+<pre><code>## Driver: GPX 
+## Available layers:
+##     layer_name     geometry_type features fields
+## 1    waypoints             Point        0     23
+## 2       routes       Line String        0     12
+## 3       tracks Multi Line String        1     13
+## 4 route_points             Point        0     25
+## 5 track_points             Point      951     26</code></pre>
+<pre class="r"><code># run `st_read` to read in the data. Use the ``layer` argument to specify the layer name
+
+tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)</code></pre>
+<pre><code>## Reading layer `tracks&#39; from data source 
+##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\cp.gpx&#39; using driver `GPX&#39;
+## Simple feature collection with 1 feature and 13 fields
+## Geometry type: MULTILINESTRING
+## Dimension:     XY
+## Bounding box:  xmin: -66.73672 ymin: 18.1498 xmax: -66.71278 ymax: 18.27058
+## Geodetic CRS:  WGS 84</code></pre>
+<pre class="r"><code>points &lt;- st_read(&quot;../data/gps/Waypoints_31-MAR-21.gpx&quot;, layer = &quot;waypoints&quot;)</code></pre>
+<pre><code>## Reading layer `waypoints&#39; from data source 
+##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\Waypoints_31-MAR-21.gpx&#39; 
+##   using driver `GPX&#39;
+## Simple feature collection with 2 features and 23 fields
+## Geometry type: POINT
+## Dimension:     XY
+## Bounding box:  xmin: -66.76933 ymin: 18.28765 xmax: -66.76933 ymax: 18.28765
+## Geodetic CRS:  WGS 84</code></pre>
+<pre class="r"><code># how to get the coordinate information
+points_coord &lt;- st_coordinates(points)</code></pre>
+<p>Alternatively, you can use <code>readGPX</code> from the package <code>plotKML</code></p>
+<pre class="r"><code>tracks2 &lt;- readGPX(&quot;../data/gps/cp.gpx&quot;)
+
+tracks$tracks # in this case, the data are buried in a list of dataframes but it includes the coordinates</code></pre>
+<pre><code>## NULL</code></pre>
+</div>
+<div id="using-qgis-for-gps-import" class="section level3">
+<h3>Using QGIS for GPS import</h3>
+<p>Alternatively, you can use QGIS to import the data.</p>
 <p><a href="https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html" class="uri">https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html</a></p>
+</div>
 </div>
 <div id="making-maps" class="section level2">
 <h2>Making Maps</h2>
+<div id="qgis" class="section level3">
+<h3>QGIS</h3>
+<p>Making maps is probably easiest in QGIS.</p>
 <p>Mapping guide (start at 7): <a href="https://www.qgistutorials.com/en/docs/3/making_a_map.html" class="uri">https://www.qgistutorials.com/en/docs/3/making_a_map.html</a></p>
 <p>Options for basemaps: <a href="https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30" class="uri">https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30</a></p>
+</div>
+<div id="r" class="section level3">
+<h3>R</h3>
+<p>If you use <code>sf</code>, you can plot the imported data with the package <code>ggplot2</code>.</p>
+<pre class="r"><code>library(ggplot2)
+
+ggplot(tracks) + geom_sf()</code></pre>
+<p><img src="01_GPS_files/figure-html/plot_sf-1.png" width="672" /></p>
+</div>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<p><a href="https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/" class="uri">https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/</a></p>
 </div>
 
 
