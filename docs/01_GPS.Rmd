@@ -2,20 +2,24 @@
 title: "Download GPS data and make a map"
 ---
 
-## Basic concepts behind GPS
-
-### How it works
-
-GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.
-
-### Coordinate systems
-
 ```{r images, echo=FALSE}
 # Define variable containing url
 url1 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-88C05D5F-BFAA-42D5-8D4F-2D6014CFC5CB-web.gif"
 
 url2 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-0921FD4E-B619-491B-92C2-38B70E231948-web.gif"
+
+url3 <-"https://gisgeography.com/wp-content/uploads/2016/11/GPS-Trilateration-Feature-678x388.png"
 ```
+
+## Basic concepts behind GPS
+
+### How it works
+
+<center><img src="`r url3`"></center>
+
+GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.
+
+### Coordinate systems
 
 GPS collects vector data, which is based on points defined in 2 or 3 dimensions. A lot of times you will see the geographic coordinate system used, which actually is defining location on a sphere. 
 
@@ -46,13 +50,13 @@ Another file format you may encounter are "shapefiles", which originated from ES
 
 You can find example GPS data here:
 
-[GPX points](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/Waypoints_31-MAR-21.gpx)
+[GPX points](https://drive.google.com/open?id=1lVvyGvUi4W82GAmS7ToLvC3vBal5wcz9&authuser=likevin%40umich.edu&usp=drive_fs)
 
-[GPX track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.gpx)
+[GPX track](https://drive.google.com/open?id=1lZHyiDPTvuKHhX-gWH8-dsxaszwMyUxG&authuser=likevin%40umich.edu&usp=drive_fs)
 
-[kml track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.kml)
+[kml track](https://drive.google.com/open?id=1lWmvv6L2E7Ipk7elbTJYQTeAgpEDvsfz&authuser=likevin%40umich.edu&usp=drive_fs)
 
-[geoJSON track](https://raw.githubusercontent.com/KwnLi/GIS_workshop/main/data/gps/cp.geojson)
+[geoJSON track](https://drive.google.com/open?id=1lab7fO0hWPdvDl2sX9jKWOGQ1lFtwiD-&authuser=likevin%40umich.edu&usp=drive_fs)
 
 ### Using r
 
@@ -92,7 +96,7 @@ Alternatively, you can use `readGPX` from the package `plotKML`
 
 tracks2 <- readGPX("../data/gps/cp.gpx")
 
-tracks$tracks # in this case, the data are buried in a list of dataframes but it includes the coordinates
+head(tracks2$tracks) # in this case, the data are buried in a list of dataframes but it includes the coordinates
 
 ```
 
@@ -125,3 +129,5 @@ ggplot(tracks) + geom_sf()
 
 ## References
 https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/
+
+https://gisgeography.com/trilateration-triangulation-gps/
