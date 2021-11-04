@@ -15,9 +15,9 @@ url3 <-"https://gisgeography.com/wp-content/uploads/2016/11/GPS-Trilateration-Fe
 
 ### How it works
 
-<center><img src="`r url3`"></center>
-
 GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.
+
+<center><img src="`r url3`"></center>
 
 ### Coordinate systems
 
@@ -96,7 +96,7 @@ Alternatively, you can use `readGPX` from the package `plotKML`
 
 tracks2 <- readGPX("../data/gps/cp.gpx")
 
-head(tracks2$tracks) # in this case, the data are buried in a list of dataframes but it includes the coordinates
+head(tracks2$tracks[[1]]$CP) # in this case, the data are buried in a list of dataframes but it includes the coordinates
 
 ```
 
