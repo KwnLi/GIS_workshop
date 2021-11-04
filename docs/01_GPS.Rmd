@@ -2,9 +2,25 @@
 title: "Download GPS data and make a map"
 ---
 
+## Basic concepts behind GPS
+
+GPS works by estimating distances from satellites. 
+
 ## GPS formats
 
-output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+Some file formats you may encounter when dealing with data from a GPS:
+
+*.gpx* Most of the standalone recreational GPS units (e.g. Garmin) that I've encountered allow you to download gpx files. GaiaGPS also exports into this format.
+
+*.kml or .kmz* This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format
+
+*geoJSON* This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.
+
+All these formats can be read into r or QGIS.
+
+Another file format you may encounter are "shapefiles", which originated from ESRI. They do not come as as a single file and instead are several associated files that must be kept together otherwise the data will "break". This makes them harder to deal with. Recreational GPS's and GaiaGPS don't usually deal with shapefiles but you often encounter them when dealing with GIS data.
+
+
 
 ```{r libraries, message=FALSE}
 library(sf)

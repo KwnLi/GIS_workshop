@@ -245,7 +245,7 @@ $(document).ready(function () {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="01-GPS.html">01-GPS</a>
+  <a href="01_GPS.html">01-GPS</a>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -264,9 +264,18 @@ $(document).ready(function () {
 </div>
 
 
+<div id="basic-concepts-behind-gps" class="section level2">
+<h2>Basic concepts behind GPS</h2>
+<p>GPS works by estimating distances from satellites.</p>
+</div>
 <div id="gps-formats" class="section level2">
 <h2>GPS formats</h2>
-<p>output of any embedded R code chunks within the document. You can embed an R code chunk like this:</p>
+<p>Some file formats you may encounter when dealing with data from a GPS:</p>
+<p><em>.gpx</em> Most of the standalone recreational GPS units (e.g. Garmin) that I’ve encountered allow you to download gpx files. GaiaGPS also exports into this format.</p>
+<p><em>.kml or .kmz</em> This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format</p>
+<p><em>geoJSON</em> This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.</p>
+<p>All these formats can be read into r or QGIS.</p>
+<p>Another file format you may encounter are “shapefiles”, which originated from ESRI. They do not come as as a single file and instead are several associated files that must be kept together otherwise the data will “break”. This makes them harder to deal with. Recreational GPS’s and GaiaGPS don’t usually deal with shapefiles but you often encounter them when dealing with GIS data.</p>
 <pre class="r"><code>library(sf)</code></pre>
 </div>
 <div id="using-qgis-for-gps-import" class="section level2">
