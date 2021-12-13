@@ -253,11 +253,15 @@ Select the format to be **MS Office Open XML spreadsheet [XLSX]** or **Comma sep
 
 Select a output file name and folder and click **OK**.
 
+$$\\[0.1cm]$$
+
 ## 7. Examine the output table
 
 The output data table contains multiple columns with the prefix specified by the *Zonal Histogram* tool followed by a code representing the land cover class. 
 
 The values in these columns represent the count of total **pixels** covered by the buffer. This does not represent area directly. To convert to area, multiply the pixel count by the size of each cell (pixel). Since the LANDFIRE dataset has 30x30m cells, the number of pixels should be multiplied by 900 to arrive at the estimated area.
+
+$$\\[0.1cm]$$
 
 ## References
 1. http://wiki.gis.com/wiki/index.php/Buffer_(GIS)
