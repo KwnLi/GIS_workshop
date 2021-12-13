@@ -332,7 +332,9 @@ st_layers(&quot;../data/gps/cp.geojson&quot;) # only one type of data</code></pr
 <pre class="r"><code># run `st_read` to read in the data. Use the ``layer` argument to specify the layer name
 
 tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)</code></pre>
-<pre><code>## Reading layer `tracks&#39; from data source `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\cp.gpx&#39; using driver `GPX&#39;
+<pre><code>## Reading layer `tracks&#39; from data source 
+##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\cp.gpx&#39; 
+##   using driver `GPX&#39;
 ## Simple feature collection with 1 feature and 13 fields
 ## Geometry type: MULTILINESTRING
 ## Dimension:     XY
@@ -340,7 +342,8 @@ tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)
 ## Geodetic CRS:  WGS 84</code></pre>
 <pre class="r"><code>points &lt;- st_read(&quot;../data/gps/Waypoints_31-MAR-21.gpx&quot;, layer = &quot;waypoints&quot;)</code></pre>
 <pre><code>## Reading layer `waypoints&#39; from data source 
-##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\Waypoints_31-MAR-21.gpx&#39; using driver `GPX&#39;
+##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\Waypoints_31-MAR-21.gpx&#39; 
+##   using driver `GPX&#39;
 ## Simple feature collection with 2 features and 23 fields
 ## Geometry type: POINT
 ## Dimension:     XY

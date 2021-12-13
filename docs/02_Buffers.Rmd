@@ -34,6 +34,8 @@ img12_prcol <- "https://drive.google.com/uc?export=view&id=1qr2mka-AzKeX3Oth53An
 
 img13_winzon <- "https://drive.google.com/uc?export=view&id=1qyoZRDm8UkuZcSkWswVWGuvHQFAmC5ME"
 
+img14_winqgis <- "https://drive.google.com/uc?export=view&id=1r19cbSqKBDny34syZs33ejOTapvcf8Pf"
+
 ```
 
 
@@ -95,7 +97,7 @@ Today we will be working with two forms of GIS data: **vector** and **raster**.
 
 **Vectors** are points, lines, and polygons. They are built around coordinates that the define the points and vertices of these geometries. The farm points and the buffers will be in vector data.
 
-**Rasters** are grids of data that cover an entire area with wall-to-wall data. Each cell of the grid covers a regular, defined area. The land cover data will be in a raster format where each grid cell signifies the land cover within a 30x30m area (estimated by majority coverage).
+**Rasters** are grids of data that maps an entire region completely. Each cell of the grid covers and summarizes a regular, defined component area within the region (e.g. a square). The land cover data we will use will be in a raster format where each grid cell signifies the land cover within a 30x30m area (estimated by majority coverage).
 
 $$\\[0.1cm]$$
 
@@ -103,7 +105,7 @@ $$\\[0.1cm]$$
 
 #### You need QGIS:
 
-https://qgis.org/en/site/forusers/download.html
+**QGIS Download Site:** https://qgis.org/en/site/forusers/download.html
 
 $$\\[0.05cm]$$
 
@@ -119,7 +121,7 @@ $$\\[0.05cm]$$
 
 We will be using land cover data from the [USGS LANDFIRE dataset](https://landfire.gov/index.php). It has many different layers and its main focus is mapping and predicting wildfires, but it also includes useful data layers including vegetation classifications. Its most recent version is based on 2016 satellite data.
 
-You can download the full set of LANDFIRE data for Puerto Rico here: https://landfire.gov/getdata.php . Under "Full Extent Mosaics", click on the "Download Insular Areas" link. Then select the link for "Puerto Rico, US Virgin Island" (2016 version).
+You can download the full set of LANDFIRE data for Puerto Rico here: https://landfire.gov/getdata.php . Under "Full Extent Mosaics", click on the "Download Insular Areas" link. Then select the link for "Puerto Rico, US Virgin Island" (the 2016 version).
 
 There many different layers included in this download (it's 120 MB). A description of them all can be found in this [pdf](https://landfire.gov/documents/LF_Product_Descriptions_Table_2019.pdf). 
 We are interested in the "National Vegetation Class" layer. For your information, here are some other layers related to vegetation that might be of interest (from the pdf above):
@@ -131,6 +133,12 @@ We are interested in the "National Vegetation Class" layer. For your information
 $$\\[0.1cm]$$
 
 ## 3. Create points from farm coordinates
+
+We have coordinates taken within each of the farms we want to create buffers around. Our first step needs to be to load these coordinates into QGIS by converting them to point data.
+
+Here's a basic overview of the QGIS program window, highlighting some of the areas we are using in this workshop.
+
+<left><img src="`r img14_winqgis`"></left>
 
 #### a. Open a new project in QGIS.
 
@@ -156,7 +164,7 @@ The layer will be shown on the viewing window. However, this is a temporary laye
 
 #### d. Export the layer and change the coordinate system to a projected coordinate system
 
-In the *Layers* window (lower left), control/right click the newly-added layer and select **Export > Save Features As...**
+In the *Layers* panel (lower left), control/right click the newly-added layer and select **Export > Save Features As...**
 
 Select **Format** as "GeoPackage", which is QGIS's format.
 
@@ -262,6 +270,18 @@ The output data table contains multiple columns with the prefix specified by the
 The values in these columns represent the count of total **pixels** covered by the buffer. This does not represent area directly. To convert to area, multiply the pixel count by the size of each cell (pixel). Since the LANDFIRE dataset has 30x30m cells, the number of pixels should be multiplied by 900 to arrive at the estimated area.
 
 $$\\[0.1cm]$$
+## 8. Extra Credit
+
+### Make buffers with R.
+
+R can help make this process faster if you want to run many buffers and create and analyze many outputs. Here are instructions for doing the same thing with R: https://kwnli.github.io/GIS_workshop/02_BuffersWithR.html
+
+
+### More functions to summarize the data within a buffer
+
+Other functions can be used to summarize the land cover or other landscape data inside a buffer. For example, the [Zonal Statistics tool](https://docs.qgis.org/3.16/en/docs/user_manual/processing_algs/qgis/rasteranalysis.html#zonal-statistics) in QGIS could be useful for summarizing continuous values (e.g. percent canopy cover).
+
+With R, the package [LandscapeMetrics](https://r-spatialecology.github.io/landscapemetrics/) allows you to calculate even more statistics, though not based on buffers. This includes things like total edge length within a landscape.
 
 ## References
 1. http://wiki.gis.com/wiki/index.php/Buffer_(GIS)
