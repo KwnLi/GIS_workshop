@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+
+
+<title>Conduct buffer analysis</title>
+
+<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/default.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">
+  code{white-space: pre-wrap;}
+  span.smallcaps{font-variant: small-caps;}
+  span.underline{text-decoration: underline;}
+  div.column{display: inline-block; vertical-align: top; width: 50%;}
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  ul.task-list{list-style: none;}
+    </style>
+
+<style type="text/css">code{white-space: pre;}</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+pre code {
+  padding: 0;
+}
+</style>
+
+
+<style type="text/css">
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #adb5bd;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script type="text/javascript">
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.tab('show');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+
+  // Navbar adjustments
+  var navHeight = $(".navbar").first().height() + 15;
+  var style = document.createElement('style');
+  var pt = "padding-top: " + navHeight + "px; ";
+  var mt = "margin-top: -" + navHeight + "px; ";
+  var css = "";
+  // offset scroll position for anchor links (for fixed navbar)
+  for (var i = 1; i <= 6; i++) {
+    css += ".section h" + i + "{ " + pt + mt + "}\n";
+  }
+  style.innerHTML = "body {" + pt + "padding-bottom: 40px; }\n" + css;
+  document.head.appendChild(style);
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+  background-color: transparent;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">GIS Workshop</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="01_GPS.html">01-GPS</a>
+</li>
+<li>
+  <a href="02_Buffers.html">02-Buffers</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div id="header">
+
+
+
+<h1 class="title toc-ignore">Conduct buffer analysis</h1>
+
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="#background">1. Background</a>
+<ul>
+<li><a href="#what-are-buffers">What are buffers?</a></li>
+<li><a href="#what-can-be-done-with-buffers">What can be done with buffers?</a></li>
+<li><a href="#land-cover-data">Land cover data</a></li>
+</ul></li>
+<li><a href="#gis-overview">2. GIS overview</a>
+<ul>
+<li><a href="#notes-about-gis-data-types">Notes about GIS data types</a></li>
+<li><a href="#data-downloads">Data downloads</a></li>
+</ul></li>
+<li><a href="#create-points-from-farm-coordinates">3. Create points from farm coordinates</a></li>
+<li><a href="#create-buffers-around-farm-points">4. Create buffers around farm points</a></li>
+<li><a href="#load-the-landfire-data">5. Load the LANDFIRE data</a></li>
+<li><a href="#extract-land-cover-statistics-for-each-buffer">6. Extract land cover statistics for each buffer</a></li>
+<li><a href="#examine-the-output-table">7. Examine the output table</a></li>
+<li><a href="#references">References</a></li>
+</ul>
+</div>
+
+<div id="background" class="section level2">
+<h2>1. Background</h2>
+<div id="what-are-buffers" class="section level3">
+<h3>What are buffers?</h3>
+<p>In GIS, buffers are a zone that is drawn around a geographic feature like a point, line, or polygon. The “buffer distance” defines how far the edges of the buffer zone are from the target feature that’s being buffered.</p>
+<p>Creating a buffer around a point results in a circle with a radius equal to the buffer distance.</p>
+<center>
+<img src="http://wiki.gis.com/wiki/images/9/9c/BufferExamples.jpg">
+</center>
+<p><strong>Figure 1</strong> Examples of buffers around a point, a line, and a polygon. [1]</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+<div id="what-can-be-done-with-buffers" class="section level3">
+<h3>What can be done with buffers?</h3>
+<p>Buffers can be used to delineate an area that might be relevant, ecologically. For example, wild pollinators or natural enemies may require forest for habitat. To quantify the amount of forest around a farm, you could create a buffer around it and measure the total amount of forest within this buffer. You could also perform other statistics to summarize the composition and configuration of land covers (habitats) within the buffer.</p>
+<p>In the example below, 500m and 1500m buffers have been placed around locations in a coffee growing landscape in Turrialba, Costa Rica. The study [2] was looking at the correlation between different land cover types and the incidence of coffee berry borer, coffee leaf rust, and root-knot nematodes.</p>
+<center>
+<img src="https://drive.google.com/uc?export=view&id=1paWz37FjfCZMgYzteZZISJ0Ks-cx5S8e" style="width: 650px; max-width: 100%; height: auto">
+</center>
+<p><strong>Figure 2</strong> An example of buffers placed in a coffee-growing landscape in Turrialba, Costa Rica. From Avelino et al., 2012. [2]</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+<div id="land-cover-data" class="section level3">
+<h3>Land cover data</h3>
+<p>The other component to performing a buffer analysis is the land cover layer. This is basically a map that covers the region of interest. It differentiates all areas into different “land cover classes”, e.g., “forest”, “row crops”, “pasture”, etc. We use the buffer to define only the portion we’re interested in, for quantification and further analysis.</p>
+<p>Land cover data can be generated by classifying remote sensing images (e.g., from satellites or aerial photos). This process can be automated using algorithms, or could be done manually by identifying and drawing boundaries of different land covers by hand.</p>
+<center>
+<img src="https://drive.google.com/uc?export=view&id=1pb-YLRV4TOHk5F5KD-bSTqMdUxJwkAdl">
+</center>
+<p><strong>Figure 3</strong> Illustration of the process of creating land cover data. In this case, the land cover data is derived from Landsat TM remote sensing imagery. [3]</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+</div>
+<div id="gis-overview" class="section level2">
+<h2>2. GIS overview</h2>
+<p>Today we will use QGIS to:</p>
+<ol style="list-style-type: decimal">
+<li><p>Create points to represent the locations of 26 farms in Puerto Rico based on their geographic coordinates.</p></li>
+<li><p>Find and load land cover data.</p></li>
+<li><p>Create a buffer around each of the farm points.</p></li>
+<li><p>Extract counts of the land cover classes within each buffer and export them to an Excel file.</p></li>
+</ol>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+<div id="notes-about-gis-data-types" class="section level3">
+<h3>Notes about GIS data types</h3>
+<p>Today we will be working with two forms of GIS data: <strong>vector</strong> and <strong>raster</strong>.</p>
+<p><strong>Vectors</strong> are points, lines, and polygons. They are built around coordinates that the define the points and vertices of these geometries. The farm points and the buffers will be in vector data.</p>
+<p><strong>Rasters</strong> are grids of data that cover an entire area with wall-to-wall data. Each cell of the grid covers a regular, defined area. The land cover data will be in a raster format where each grid cell signifies the land cover within a 30x30m area (estimated by majority coverage).</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+<div id="data-downloads" class="section level3">
+<h3>Data downloads</h3>
+<div id="you-need-qgis" class="section level4">
+<h4>You need QGIS:</h4>
+<p><a href="https://qgis.org/en/site/forusers/download.html" class="uri">https://qgis.org/en/site/forusers/download.html</a></p>
+<p><span class="math display">\[\\[0.05cm]\]</span></p>
+</div>
+<div id="you-need-two-data-layers" class="section level4">
+<h4>You need two data layers:</h4>
+<p><a href="https://drive.google.com/uc?export=download&amp;id=1dvNtK4ZrTTOdCIiYh9DzIgczzSSPP8yK">1. Farm coordinates</a></p>
+<p><a href="https://drive.google.com/uc?export=download&amp;id=1put6aO5vG6tDRX7r0a9Leb3KQti3YxuN">2. Land cover data (zipped)</a></p>
+<p><span class="math display">\[\\[0.05cm]\]</span></p>
+</div>
+<div id="more-about-the-land-cover-data" class="section level4">
+<h4>More about the land cover data:</h4>
+<p>We will be using land cover data from the <a href="https://landfire.gov/index.php">USGS LANDFIRE dataset</a>. It has many different layers and its main focus is mapping and predicting wildfires, but it also includes useful data layers including vegetation classifications. Its most recent version is based on 2016 satellite data.</p>
+<p>You can download the full set of LANDFIRE data for Puerto Rico here: <a href="https://landfire.gov/getdata.php" class="uri">https://landfire.gov/getdata.php</a> . Under “Full Extent Mosaics”, click on the “Download Insular Areas” link. Then select the link for “Puerto Rico, US Virgin Island” (2016 version).</p>
+<p>There many different layers included in this download (it’s 120 MB). A description of them all can be found in this <a href="https://landfire.gov/documents/LF_Product_Descriptions_Table_2019.pdf">pdf</a>. We are interested in the “National Vegetation Class” layer. For your information, here are some other layers related to vegetation that might be of interest (from the pdf above):</p>
+<p><strong>Table 1</strong> Vegetation layers available in the LANDFIRE dataset.</p>
+<center>
+<img src="https://drive.google.com/uc?export=view&id=1pp2RkdDiMXk-GT5GuBXKS5meGdogEHu9">
+</center>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+</div>
+</div>
+<div id="create-points-from-farm-coordinates" class="section level2">
+<h2>3. Create points from farm coordinates</h2>
+<div id="a.-open-a-new-project-in-qgis." class="section level4">
+<h4>a. Open a new project in QGIS.</h4>
+</div>
+<div id="b.-open-the-data-source-manager" class="section level4">
+<h4>b. Open the “Data Source Manager”</h4>
+<p>It looks like this:</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1pyRPXxfQYRVgMIOQBn7aeAm2xalo73eJ"></left></p>
+</div>
+<div id="c.-choose-delimited-text-in-the-vertical-bar-to-the-left-to-load-the-farm-coordinate-file" class="section level4">
+<h4>c. Choose “Delimited Text” in the vertical bar to the left to load the farm coordinate file</h4>
+<p>Under <strong>File name</strong> find the coordinate file. Make sure the longitude column (“lon”) is selected as the <strong>X field</strong> and the latitude column (“lat”) as the <strong>Y field</strong>, under the section for “Geometry Definition”</p>
+<p>Also make sure <strong>Geometry CRS</strong> is “EPSG:4326 - WGS 84”. This is specific to these coordinates and will not always work for all data! See the GPS workshop for more information about coordinate systems.</p>
+<p>Click <strong>Add</strong> and then <strong>Close</strong></p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1q5STdCGDngJ5qyX8d8U8sxeDPRk_vOM0"></left></p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+<p>The layer will be shown on the viewing window. However, this is a temporary layer. In order to do analysis on it you must save it.</p>
+</div>
+<div id="d.-export-the-layer-and-change-the-coordinate-system-to-a-projected-coordinate-system" class="section level4">
+<h4>d. Export the layer and change the coordinate system to a projected coordinate system</h4>
+<p>In the <em>Layers</em> window (lower left), control/right click the newly-added layer and select <strong>Export &gt; Save Features As…</strong></p>
+<p>Select <strong>Format</strong> as “GeoPackage”, which is QGIS’s format.</p>
+<p>Select a file name and location</p>
+<p><strong>Importantly, change the CRS to a projected coordinate system.</strong> Click the button next to the <strong>CRS</strong> section to bring up the “Coordinate Reference System Selector”. Use the <strong>Filter</strong> function to search for a <em>projected</em> coordinate system for Puerto Rico (search for Puerto Rico).</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qCKZQWc6cGulk_PEefp90-PY8HInyokw"></left></p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+</div>
+<div id="create-buffers-around-farm-points" class="section level2">
+<h2>4. Create buffers around farm points</h2>
+<div id="a.-open-the-buffer-window" class="section level4">
+<h4>a. Open the Buffer window</h4>
+<p>Under the <strong>Vector</strong> menu on the top menu bar, select <strong>Geoprocessing Tools &gt; Buffer</strong></p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qVYfzRirx2fKf4H1wz2eHl_ajDA7jcKC"></left></p>
+</div>
+<div id="b.-create-a-buffer-around-the-farm-points-layer" class="section level4">
+<h4>b. Create a buffer around the farm points layer</h4>
+<p>Under <strong>Input layer</strong>, select the farm points layer you created.</p>
+<p>Under <strong>Distance</strong>, choose the buffer distance, i.e. the radius of the circle to be created around each point. For example, 500 meters.</p>
+<p>Use <strong>Segments</strong> to define the number of line segments used to make a quarter circle of the buffer. With Segments = 5, the buffer will be approximated by a 20-sided polygon.</p>
+<p><strong><em>Note:</em></strong> You can use <strong>Run as Batch Process…</strong> if you want to repeatedly run this buffer tool (e.g. to repeat the buffer at different distances).</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qaEmKZ1AQ14c4enhZ_PMARaZxmxs5nnw"></left></p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+</div>
+<div id="load-the-landfire-data" class="section level2">
+<h2>5. Load the LANDFIRE data</h2>
+<div id="a.-load-landfire-layer" class="section level4">
+<h4>a. Load LANDFIRE layer</h4>
+<p>Open the <strong>Data Source Manager</strong> again (see 3b.)</p>
+<p>In the <em>Data Source Manager</em> window, select the <strong>Raster</strong> tab in the vertical menu bar to the left.</p>
+<p>Under <strong>Source</strong> navigate to the downloaded LANDFIRE vegetation class raster data. This should be “LV16_NVC_200.tif”. Make sure the file name ends with <strong>.tif</strong>.</p>
+<p>Click <strong>Add</strong> and then <strong>Close</strong>.</p>
+</div>
+<div id="b.-adjust-the-display-of-the-vegetation-class-layer" class="section level4">
+<h4>b. Adjust the display of the vegetation class layer</h4>
+<p>So far, the loaded LANDFIRE data for Puerto Rico appears in grayscale. This is because QGIS does not know that the data in the raster layer represent categories of land cover rather than continuous values.</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qqNOY6sibqg7OCmxJbOI1YN87giYDhBm"></left></p>
+<p>The color display information, as well as the definitions for the land cover codes are actually stored within the raster data for this format (GeoTIFF). However, you have to install a plugin (<strong>RasterAttributeTable</strong>) to be able to access this data.</p>
+<p>Under the <strong>Plugins</strong> menu on the top menu bar, select <strong>Manage and Install Plugins</strong>.</p>
+<p>In the <em>Plugins</em> window, search for “RasterAttributeTable” and click <strong>Install Plugin</strong>.</p>
+<p>After you have installed the plugin, control/right click on the land cover layer and select “Open Attribute Table”.</p>
+<p>In the attribute table, you can check out all the land cover/vegetation classes in this layer and their total counts. In order to display the intended color of all the vegetation classes, click on the <strong>Classify</strong> button in the upper right corner. This will change the colors of the land cover layer. The colors of the categories are also shown as the background of the leftmost column of the attribute table.</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qqU8SO5F8dOEgqnRQTEJfnEqlQ40Vod_"></left></p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qr2mka-AzKeX3Oth53AnhUGlXTKCF8mi"></left></p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+</div>
+<div id="extract-land-cover-statistics-for-each-buffer" class="section level2">
+<h2>6. Extract land cover statistics for each buffer</h2>
+<div id="a.-open-the-zonal-histogram-tool-in-the-processing-toolbox-panel" class="section level4">
+<h4>a. Open the “Zonal Histogram” tool in the Processing Toolbox Panel</h4>
+<p>If you cannot find the <strong>Processing Toolbox</strong> panel, make sure it’s activated by going to <strong>View &gt; Panels &gt; Processing Toolbox</strong> and checking the box.</p>
+<p>In the <strong>Processing Toolbox</strong>, expand <em>Raster analysis</em> and select <strong>Zonal Histogram</strong></p>
+<p>In the <em>Zonal Histogram</em> window, under <strong>Raster layer</strong>, select the LANDFIRE layer.</p>
+<p>Under <strong>Vector layer containing zones</strong>, select the layer for the farm buffers.</p>
+<p>Optionally, you can change the prefix for the columns representing each land cover type.</p>
+<p><strong><em>Note:</em></strong> As with the buffer tool, you can use <strong>Run as Batch Process…</strong> if you want to repeatedly run the tool (e.g. to repeat the extraction for multiple buffers).</p>
+<p><left><img src="https://drive.google.com/uc?export=view&id=1qyoZRDm8UkuZcSkWswVWGuvHQFAmC5ME"></left></p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+<div id="b.-export-data-to-excel" class="section level4">
+<h4>b. Export data to excel</h4>
+<p>In the <em>Layers</em> panel, control/right click the new output result from the Zonal Histograms tool. Select <strong>Export&gt;Save Vector Layer as…</strong>.</p>
+<p>Select the format to be <strong>MS Office Open XML spreadsheet [XLSX]</strong> or <strong>Comma separated value [CSV]</strong></p>
+<p>Select a output file name and folder and click <strong>OK</strong>.</p>
+</div>
+</div>
+<div id="examine-the-output-table" class="section level2">
+<h2>7. Examine the output table</h2>
+<p>The output data table contains multiple columns with the prefix specified by the <em>Zonal Histogram</em> tool followed by a code representing the land cover class.</p>
+<p>The values in these columns represent the count of total <strong>pixels</strong> covered by the buffer. This does not represent area directly. To convert to area, multiply the pixel count by the size of each cell (pixel). Since the LANDFIRE dataset has 30x30m cells, the number of pixels should be multiplied by 900 to arrive at the estimated area.</p>
+</div>
+<div id="references" class="section level2">
+<h2>References</h2>
+<ol style="list-style-type: decimal">
+<li><p><a href="http://wiki.gis.com/wiki/index.php/Buffer_(GIS)" class="uri">http://wiki.gis.com/wiki/index.php/Buffer_(GIS)</a></p></li>
+<li><p>Avelino, J., Romero-Gurdián, A., Cruz-Cuellar, H. F. &amp; Declerck, F. A. J. Landscape context and scale differentially impact coffee leaf rust, coffee berry borer, and coffee root-knot nematodes. <em>Ecological Applications</em> 22, 584–596 (2012).</p></li>
+<li><p>By Uddinkabir - Own work, CC BY-SA 4.0, <a href="https://commons.wikimedia.org/w/index.php?curid=41183128" class="uri">https://commons.wikimedia.org/w/index.php?curid=41183128</a></p></li>
+</ol>
+</div>
+
+
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.odd').parent('tbody').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open');
+  });
+});
+</script>
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

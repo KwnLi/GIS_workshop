@@ -1,0 +1,33 @@
+{
+"type": "FeatureCollection",
+"name": "farms",
+"crs": { "type": "name", "properties": { "name": "urn:ogc:def:crs:OGC:1.3:CRS84" } },
+"features": [
+{ "type": "Feature", "properties": { "siteName": "ADJU7", "farmName": "Baliar", "lat": 18.196703, "lon": -66.83178202000001 }, "geometry": { "type": "Point", "coordinates": [ -66.83178202, 18.196703 ] } },
+{ "type": "Feature", "properties": { "siteName": "ADJU8", "farmName": "Tres Angeles/ Juan Melendez", "lat": 18.22971303, "lon": -66.80660899 }, "geometry": { "type": "Point", "coordinates": [ -66.80660899, 18.22971303 ] } },
+{ "type": "Feature", "properties": { "siteName": "JAYU2", "farmName": "Roberto Atiensa", "lat": 18.21610199, "lon": -66.56724698 }, "geometry": { "type": "Point", "coordinates": [ -66.56724698, 18.21610199 ] } },
+{ "type": "Feature", "properties": { "siteName": "JAYU3", "farmName": "Roberto Atiensa", "lat": 18.21297504, "lon": -66.56458899 }, "geometry": { "type": "Point", "coordinates": [ -66.56458899, 18.21297504 ] } },
+{ "type": "Feature", "properties": { "siteName": "JUAN1", "farmName": "Pablo Reyes", "lat": 18.12979496, "lon": -66.53100296 }, "geometry": { "type": "Point", "coordinates": [ -66.53100296, 18.12979496 ] } },
+{ "type": "Feature", "properties": { "siteName": "JUAN7*", "farmName": "Iluminado I", "lat": 18.11992904, "lon": -66.55841497 }, "geometry": { "type": "Point", "coordinates": [ -66.55841497, 18.11992904 ] } },
+{ "type": "Feature", "properties": { "siteName": "LASM1*", "farmName": "Jose Malave", "lat": 18.22224, "lon": -67.0005 }, "geometry": { "type": "Point", "coordinates": [ -67.0005, 18.22224 ] } },
+{ "type": "Feature", "properties": { "siteName": "LASM2", "farmName": "Artemio", "lat": 18.21372396, "lon": -66.97568698000001 }, "geometry": { "type": "Point", "coordinates": [ -66.97568698, 18.21372396 ] } },
+{ "type": "Feature", "properties": { "siteName": "LASM3", "farmName": "Oscar Ruiz", "lat": 18.20963896, "lon": -66.97964097000001 }, "geometry": { "type": "Point", "coordinates": [ -66.97964097, 18.20963896 ] } },
+{ "type": "Feature", "properties": { "siteName": "MARI2*", "farmName": "Wilfredo Ruiz (Remanso de Paz)", "lat": 18.15421597, "lon": -66.93489804 }, "geometry": { "type": "Point", "coordinates": [ -66.93489804, 18.15421597 ] } },
+{ "type": "Feature", "properties": { "siteName": "MARI3*", "farmName": "Luis Ramirez (F07)", "lat": 18.15231504, "lon": -66.93033803 }, "geometry": { "type": "Point", "coordinates": [ -66.93033803, 18.15231504 ] } },
+{ "type": "Feature", "properties": { "siteName": "MARI8*", "farmName": "Junito (Finca Vista Hermosa)", "lat": 18.15202796, "lon": -66.89209401 }, "geometry": { "type": "Point", "coordinates": [ -66.89209401, 18.15202796 ] } },
+{ "type": "Feature", "properties": { "siteName": "OROC1", "farmName": "Finca Guaraguao/Tato ", "lat": 18.17530098, "lon": -66.41616502 }, "geometry": { "type": "Point", "coordinates": [ -66.41616502, 18.17530098 ] } },
+{ "type": "Feature", "properties": { "siteName": "PONC1*", "farmName": "Luis Luna Miranda", "lat": 18.11461701, "lon": -66.55838697 }, "geometry": { "type": "Point", "coordinates": [ -66.55838697, 18.11461701 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA10", "farmName": "Papucho DAD", "lat": 18.263964, "lon": -66.61100303000001 }, "geometry": { "type": "Point", "coordinates": [ -66.61100303, 18.263964 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA13", "farmName": "Junior Ralat", "lat": 18.25792, "lon": -66.7958 }, "geometry": { "type": "Point", "coordinates": [ -66.7958, 18.25792 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA16*", "farmName": "Julio Rivera", "lat": 18.27161198, "lon": -66.67007097 }, "geometry": { "type": "Point", "coordinates": [ -66.67007097, 18.27161198 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA17*", "farmName": "Fena Boneta", "lat": 18.26936304, "lon": -66.74206397 }, "geometry": { "type": "Point", "coordinates": [ -66.74206397, 18.26936304 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA18", "farmName": "Rafael Torre", "lat": 18.272386, "lon": -66.754348 }, "geometry": { "type": "Point", "coordinates": [ -66.754348, 18.272386 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA2", "farmName": "Gran Batey (I)", "lat": 18.28785804, "lon": -66.77026397 }, "geometry": { "type": "Point", "coordinates": [ -66.77026397, 18.28785804 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA20*", "farmName": "Raul Toledo", "lat": 18.27949097, "lon": -66.82820898 }, "geometry": { "type": "Point", "coordinates": [ -66.82820898, 18.27949097 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA30*", "farmName": "Edermin Biruet/Eufemia", "lat": 18.26012702, "lon": -66.60576602 }, "geometry": { "type": "Point", "coordinates": [ -66.60576602, 18.26012702 ] } },
+{ "type": "Feature", "properties": { "siteName": "UTUA5", "farmName": "Ramon Rivera", "lat": 18.26100896, "lon": -66.61855898 }, "geometry": { "type": "Point", "coordinates": [ -66.61855898, 18.26100896 ] } },
+{ "type": "Feature", "properties": { "siteName": "YAUC3", "farmName": "Samuel Rivera (finca2)", "lat": 18.14402299, "lon": -66.81915804 }, "geometry": { "type": "Point", "coordinates": [ -66.81915804, 18.14402299 ] } },
+{ "type": "Feature", "properties": { "siteName": "YAUC4*", "farmName": "Elisa Alicea (Remanso)/Javier", "lat": 18.14027703, "lon": -66.83566603 }, "geometry": { "type": "Point", "coordinates": [ -66.83566603, 18.14027703 ] } },
+{ "type": "Feature", "properties": { "siteName": "YAUC5*", "farmName": "Luis Troche Orengo", "lat": 18.14963602, "lon": -66.84244598 }, "geometry": { "type": "Point", "coordinates": [ -66.84244598, 18.14963602 ] } }
+]
+}
