@@ -86,12 +86,10 @@ lf.pr <- project(lf, "epsg:6566") # project the land fire layer to the same PR p
 farms500 <- buffer(farms.pr, width = 500) # buffer by 500 m
 
 # use the terra function "extract" to isolate the cells in the land cover layer that coincide with the 500 m buffers
-lf500 <- terra::extract(lf.pr, farms500, list = TRUE, touches = TRUE, xy = TRUE) %>%
+lf500 <- terra::extract(lf.pr, farms500, list = TRUE, touches = TRUE, xy = FALSE) %>%
   lapply(table) %>%  # the output of extract is a list; this summarizes each buffer into a table (still in a list)
   bind_rows() %>% # output of extract is a list; this condenses all buffers into one table
   bind_cols(site = farms500$siteName)  # re-add the site name from the buffer layer
-
-lfcrop <- terra::crop(lf.pr, farms500)
 
 ```
 
@@ -105,7 +103,7 @@ lf.cats <- cats(lf.pr)[[1]]  # the double brackets is because the output is a li
 
 # For plotting,let's make a long dataset with columns for the site and land cover type
 lf500.long <- pivot_longer(lf500, 
-                           cols = `6336`:`7292`,
+                           cols = `6336`:`6348`,
                            names_to = "ID",
                            values_to = "area") %>%
   mutate(ID = as.numeric(ID)) %>%
