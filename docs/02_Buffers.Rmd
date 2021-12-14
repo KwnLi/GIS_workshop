@@ -270,6 +270,7 @@ The output data table contains multiple columns with the prefix specified by the
 The values in these columns represent the count of total **pixels** covered by the buffer. This does not represent area directly. To convert to area, multiply the pixel count by the size of each cell (pixel). Since the LANDFIRE dataset has 30x30m cells, the number of pixels should be multiplied by 900 to arrive at the estimated area.
 
 $$\\[0.1cm]$$
+
 ## 8. Extra Credit
 
 ### Make buffers with R.
@@ -282,6 +283,8 @@ R can help make this process faster if you want to run many buffers and create a
 Other functions can be used to summarize the land cover or other landscape data inside a buffer. For example, the [Zonal Statistics tool](https://docs.qgis.org/3.16/en/docs/user_manual/processing_algs/qgis/rasteranalysis.html#zonal-statistics) in QGIS could be useful for summarizing continuous values (e.g. percent canopy cover).
 
 With R, the package [LandscapeMetrics](https://r-spatialecology.github.io/landscapemetrics/) allows you to calculate even more statistics, though not based on buffers. This includes things like total edge length within a landscape.
+
+$$\\[0.1cm]$$
 
 ## References
 1. http://wiki.gis.com/wiki/index.php/Buffer_(GIS)

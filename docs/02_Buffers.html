@@ -283,7 +283,8 @@ $(document).ready(function () {
 <li><a href="#create-buffers-around-farm-points">4. Create buffers around farm points</a></li>
 <li><a href="#load-the-landfire-data">5. Load the LANDFIRE data</a></li>
 <li><a href="#extract-land-cover-statistics-for-each-buffer">6. Extract land cover statistics for each buffer</a></li>
-<li><a href="#examine-the-output-table">7. Examine the output table</a>
+<li><a href="#examine-the-output-table">7. Examine the output table</a></li>
+<li><a href="#extra-credit">8. Extra Credit</a>
 <ul>
 <li><a href="#make-buffers-with-r.">Make buffers with R.</a></li>
 <li><a href="#more-functions-to-summarize-the-data-within-a-buffer">More functions to summarize the data within a buffer</a></li>
@@ -465,7 +466,10 @@ $(document).ready(function () {
 <h2>7. Examine the output table</h2>
 <p>The output data table contains multiple columns with the prefix specified by the <em>Zonal Histogram</em> tool followed by a code representing the land cover class.</p>
 <p>The values in these columns represent the count of total <strong>pixels</strong> covered by the buffer. This does not represent area directly. To convert to area, multiply the pixel count by the size of each cell (pixel). Since the LANDFIRE dataset has 30x30m cells, the number of pixels should be multiplied by 900 to arrive at the estimated area.</p>
-<p><span class="math display">\[\\[0.1cm]\]</span> ## 8. Extra Credit</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
+</div>
+<div id="extra-credit" class="section level2">
+<h2>8. Extra Credit</h2>
 <div id="make-buffers-with-r." class="section level3">
 <h3>Make buffers with R.</h3>
 <p>R can help make this process faster if you want to run many buffers and create and analyze many outputs. Here are instructions for doing the same thing with R: <a href="https://kwnli.github.io/GIS_workshop/02_BuffersWithR.html" class="uri">https://kwnli.github.io/GIS_workshop/02_BuffersWithR.html</a></p>
@@ -474,6 +478,7 @@ $(document).ready(function () {
 <h3>More functions to summarize the data within a buffer</h3>
 <p>Other functions can be used to summarize the land cover or other landscape data inside a buffer. For example, the <a href="https://docs.qgis.org/3.16/en/docs/user_manual/processing_algs/qgis/rasteranalysis.html#zonal-statistics">Zonal Statistics tool</a> in QGIS could be useful for summarizing continuous values (e.g. percent canopy cover).</p>
 <p>With R, the package <a href="https://r-spatialecology.github.io/landscapemetrics/">LandscapeMetrics</a> allows you to calculate even more statistics, though not based on buffers. This includes things like total edge length within a landscape.</p>
+<p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
 </div>
 <div id="references" class="section level2">
