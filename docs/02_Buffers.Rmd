@@ -8,9 +8,9 @@ output:
 
 ```{r images, echo=FALSE}
 # Define variable containing url
-img1_buffers <- "http://web.archive.org/web/20221017145741if_/http://wiki.gis.com/wiki/images/9/9c/BufferExamples.jpg"
+img1_buffers <- "https://raw.githubusercontent.com/KwnLi/GIS_workshop/refs/heads/main/images/BufferExamples.jpg"
 
-img2_Avelino <- "https://drive.google.com/uc?export=view&id=1paWz37FjfCZMgYzteZZISJ0Ks-cx5S8e"
+img2_Avelino <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/Avelinoetal2012.jpg?raw=true"
 
 img3_landcover <- "https://drive.google.com/uc?export=view&id=1pb-YLRV4TOHk5F5KD-bSTqMdUxJwkAdl"
 
