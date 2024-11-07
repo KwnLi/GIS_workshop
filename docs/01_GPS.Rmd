@@ -4,11 +4,11 @@ title: "Download GPS data and make a map"
 
 ```{r images, echo=FALSE}
 # Define variable containing url
-url1 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-88C05D5F-BFAA-42D5-8D4F-2D6014CFC5CB-web.gif"
+url1 <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/url1.gif?raw=true"
 
-url2 <- "https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-0921FD4E-B619-491B-92C2-38B70E231948-web.gif"
+url2 <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/url2.gif?raw=true"
 
-url3 <-"https://gisgeography.com/wp-content/uploads/2016/11/GPS-Trilateration-Feature-678x388.png"
+url3 <-"https://github.com/KwnLi/GIS_workshop/blob/main/images/url3.png?raw=true"
 ```
 
 ## Basic concepts behind GPS
@@ -65,9 +65,8 @@ These GPS data can be loaded into r using the `sf` package. To install this pack
 Alternatively, you can use the package `plotKML`.
 
 ```{r libraries, message=FALSE}
-# install.packages("plotKML")  # run this to install the package
+# install.packages("sf")  # run this to install the package
 library(sf)
-library(plotKML)
 
 ```
 
@@ -90,15 +89,6 @@ points_coord <- st_coordinates(points)
 
 ```
 
-Alternatively, you can use `readGPX` from the package `plotKML`
-
-```{r plotKML_load_data, message = FALSE}
-
-tracks2 <- readGPX("../data/gps/cp.gpx")
-
-head(tracks2$tracks[[1]]$CP) # in this case, the data are buried in a list of dataframes but it includes the coordinates
-
-```
 
 ### Using QGIS for GPS import
 

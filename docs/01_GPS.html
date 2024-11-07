@@ -13,8 +13,8 @@
 
 <title>Download GPS data and make a map</title>
 
-<script src="site_libs/header-attrs-2.10/header-attrs.js"></script>
-<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<script src="site_libs/header-attrs-2.27/header-attrs.js"></script>
+<script src="site_libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <link href="site_libs/bootstrap-3.3.5/css/bootstrap.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
@@ -60,6 +60,7 @@ if (window.hljs) {
 
 
 
+
 <style type = "text/css">
 .main-container {
   max-width: 940px;
@@ -80,6 +81,9 @@ button.code-folding-btn:focus {
 }
 summary {
   display: list-item;
+}
+details > summary > p:only-child {
+  display: inline;
 }
 pre code {
   padding: 0;
@@ -137,11 +141,15 @@ $(document).ready(function () {
     href = "index.html";
   var menuAnchor = $('a[href="' + href + '"]');
 
-  // mark it active
-  menuAnchor.tab('show');
-
-  // if it's got a parent navbar menu mark it active as well
-  menuAnchor.closest('li.dropdown').addClass('active');
+  // mark the anchor link active (and if it's in a dropdown, also mark that active)
+  var dropdown = menuAnchor.closest('li.dropdown');
+  if (window.bootstrap) { // Bootstrap 4+
+    menuAnchor.addClass('active');
+    dropdown.find('> .dropdown-toggle').addClass('active');
+  } else { // Bootstrap 3
+    menuAnchor.parent().addClass('active');
+    dropdown.addClass('active');
+  }
 
   // Navbar adjustments
   var navHeight = $(".navbar").first().height() + 15;
@@ -170,8 +178,8 @@ $(document).ready(function () {
   border-radius: 4px;
 }
 
-.tabset-dropdown > .nav-tabs > li.active:before {
-  content: "";
+.tabset-dropdown > .nav-tabs > li.active:before, .tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "\e259";
   font-family: 'Glyphicons Halflings';
   display: inline-block;
   padding: 10px;
@@ -179,16 +187,9 @@ $(document).ready(function () {
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
-  content: "&#xe258;";
-  border: none;
-}
-
-.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
-  content: "";
+  content: "\e258";
   font-family: 'Glyphicons Halflings';
-  display: inline-block;
-  padding: 10px;
-  border-right: 1px solid #ddd;
+  border: none;
 }
 
 .tabset-dropdown > .nav-tabs > li.active {
@@ -232,7 +233,7 @@ $(document).ready(function () {
 <div class="navbar navbar-default  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
-      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-bs-toggle="collapse" data-target="#navbar" data-bs-target="#navbar">
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
         <span class="icon-bar"></span>
@@ -271,68 +272,115 @@ $(document).ready(function () {
 <h2>Basic concepts behind GPS</h2>
 <div id="how-it-works" class="section level3">
 <h3>How it works</h3>
-<p>GPS works by estimating distances from satellites through the time difference (i.e. the time it takes for the signal to travel from the satellite to your GPS receiver). You need at least four satellite signals to achieve a GPS location. Basic GPS can achieve on average 7 m accuracy 95% of the time. With additional sources of correction this accuracy can be improved, but this requires a professional grade GPS that has access to this information.</p>
+<p>GPS works by estimating distances from satellites through the time
+difference (i.e. the time it takes for the signal to travel from the
+satellite to your GPS receiver). You need at least four satellite
+signals to achieve a GPS location. Basic GPS can achieve on average 7 m
+accuracy 95% of the time. With additional sources of correction this
+accuracy can be improved, but this requires a professional grade GPS
+that has access to this information.</p>
 <center>
-<img src="https://gisgeography.com/wp-content/uploads/2016/11/GPS-Trilateration-Feature-678x388.png">
+<img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/url3.png?raw=true">
 </center>
 </div>
 <div id="coordinate-systems" class="section level3">
 <h3>Coordinate systems</h3>
-<p>GPS collects vector data, which is based on points defined in 2 or 3 dimensions. A lot of times you will see the geographic coordinate system used, which actually is defining location on a sphere.</p>
+<p>GPS collects vector data, which is based on points defined in 2 or 3
+dimensions. A lot of times you will see the geographic coordinate system
+used, which actually is defining location on a sphere.</p>
 <center>
-<img src="https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-88C05D5F-BFAA-42D5-8D4F-2D6014CFC5CB-web.gif">
+<img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/url1.gif?raw=true">
 </center>
-<p>The x direction (longitude) is defined by the angle of a vertical slice of Earth from the prime meridian, which runs through Greenwich, England. The y direction (latitude) is a horizontal slice defined by the angle from the equator.</p>
+<p>The x direction (longitude) is defined by the angle of a vertical
+slice of Earth from the prime meridian, which runs through Greenwich,
+England. The y direction (latitude) is a horizontal slice defined by the
+angle from the equator.</p>
 <center>
-<img src="https://desktop.arcgis.com/en/arcmap/10.3/guide-books/map-projections/GUID-0921FD4E-B619-491B-92C2-38B70E231948-web.gif">
+<img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/url2.gif?raw=true">
 </center>
-<p>But there isn’t just one coordinate system, so it’s important to know what coordinate system you are using when you have geographic location data. Typically, if you are downloading a GIS file, this information is built in.</p>
+<p>But there isn’t just one coordinate system, so it’s important to know
+what coordinate system you are using when you have geographic location
+data. Typically, if you are downloading a GIS file, this information is
+built in.</p>
 </div>
 <div id="gps-formats" class="section level3">
 <h3>GPS formats</h3>
-<p>Some file formats you may encounter when dealing with data from a GPS:</p>
-<p><strong>.gpx</strong> Most of the standalone recreational GPS units (e.g. Garmin) that I’ve encountered allow you to download gpx files. GaiaGPS also exports into this format.</p>
-<p><strong>.kml or .kmz</strong> This format can be read directly into Google Earth Pro. It can include different types of geometries as well as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS, you can export your data in this format</p>
-<p><strong>geoJSON</strong> This is an open source format for storing vector data. You can also export your data in this format from GaiaGPS.</p>
+<p>Some file formats you may encounter when dealing with data from a
+GPS:</p>
+<p><strong>.gpx</strong> Most of the standalone recreational GPS units
+(e.g. Garmin) that I’ve encountered allow you to download gpx files.
+GaiaGPS also exports into this format.</p>
+<p><strong>.kml or .kmz</strong> This format can be read directly into
+Google Earth Pro. It can include different types of geometries as well
+as display instructions (e.g. color, symbol, etc.). If you use GaiaGPS,
+you can export your data in this format</p>
+<p><strong>geoJSON</strong> This is an open source format for storing
+vector data. You can also export your data in this format from
+GaiaGPS.</p>
 <p>All these formats can be read into r or QGIS.</p>
-<p>Another file format you may encounter are “shapefiles”, which originated from ESRI. They do not come as as a single file and instead are several associated files that must be kept together otherwise the data will “break”. This makes them harder to deal with. Recreational GPS’s and GaiaGPS don’t usually deal with shapefiles but you often encounter them when dealing with GIS data.</p>
+<p>Another file format you may encounter are “shapefiles”, which
+originated from ESRI. They do not come as as a single file and instead
+are several associated files that must be kept together otherwise the
+data will “break”. This makes them harder to deal with. Recreational
+GPS’s and GaiaGPS don’t usually deal with shapefiles but you often
+encounter them when dealing with GIS data.</p>
 </div>
 </div>
 <div id="download-gps-data" class="section level2">
 <h2>Download GPS data</h2>
 <p>You can find example GPS data here:</p>
-<p><a href="https://drive.google.com/open?id=1lVvyGvUi4W82GAmS7ToLvC3vBal5wcz9&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">GPX points</a></p>
-<p><a href="https://drive.google.com/open?id=1lZHyiDPTvuKHhX-gWH8-dsxaszwMyUxG&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">GPX track</a></p>
-<p><a href="https://drive.google.com/open?id=1lWmvv6L2E7Ipk7elbTJYQTeAgpEDvsfz&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">kml track</a></p>
-<p><a href="https://drive.google.com/open?id=1lab7fO0hWPdvDl2sX9jKWOGQ1lFtwiD-&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">geoJSON track</a></p>
+<p><a
+href="https://drive.google.com/open?id=1lVvyGvUi4W82GAmS7ToLvC3vBal5wcz9&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">GPX
+points</a></p>
+<p><a
+href="https://drive.google.com/open?id=1lZHyiDPTvuKHhX-gWH8-dsxaszwMyUxG&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">GPX
+track</a></p>
+<p><a
+href="https://drive.google.com/open?id=1lWmvv6L2E7Ipk7elbTJYQTeAgpEDvsfz&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">kml
+track</a></p>
+<p><a
+href="https://drive.google.com/open?id=1lab7fO0hWPdvDl2sX9jKWOGQ1lFtwiD-&amp;authuser=likevin%40umich.edu&amp;usp=drive_fs">geoJSON
+track</a></p>
 <div id="using-r" class="section level3">
 <h3>Using r</h3>
-<p>These GPS data can be loaded into r using the <code>sf</code> package. To install this package, you have to install some other stuff first. There are instructions here: <a href="https://r-spatial.github.io/sf/" class="uri">https://r-spatial.github.io/sf/</a></p>
+<p>These GPS data can be loaded into r using the <code>sf</code>
+package. To install this package, you have to install some other stuff
+first. There are instructions here: <a
+href="https://r-spatial.github.io/sf/"
+class="uri">https://r-spatial.github.io/sf/</a></p>
 <p>Alternatively, you can use the package <code>plotKML</code>.</p>
-<pre class="r"><code># install.packages(&quot;plotKML&quot;)  # run this to install the package
-library(sf)
-library(plotKML)</code></pre>
-<p>GPX files contain multiple kinds of geographic data (points, lines, polygons). Most GIS software only deals with one kind at a time. This is the case with the <code>sf</code> package but not <code>plotKML</code>.</p>
-<p>In the <code>sf</code> package, running the function <code>st_layers</code> will let you peak at what kind of data is hiding in a file. You can then read in the data with <code>st_read</code>. To get to the coordinate information, use the function <code>st_coordinates</code></p>
+<pre class="r"><code># install.packages(&quot;sf&quot;)  # run this to install the package
+library(sf)</code></pre>
+<p>GPX files contain multiple kinds of geographic data (points, lines,
+polygons). Most GIS software only deals with one kind at a time. This is
+the case with the <code>sf</code> package but not
+<code>plotKML</code>.</p>
+<p>In the <code>sf</code> package, running the function
+<code>st_layers</code> will let you peak at what kind of data is hiding
+in a file. You can then read in the data with <code>st_read</code>. To
+get to the coordinate information, use the function
+<code>st_coordinates</code></p>
 <pre class="r"><code># You can explore the contents of the file first with `st_layers`
 st_layers(&quot;../data/gps/cp.geojson&quot;) # only one type of data</code></pre>
 <pre><code>## Driver: GeoJSON 
 ## Available layers:
-##   layer_name        geometry_type features fields
-## 1         cp 3D Multi Line String        1     38</code></pre>
+##   layer_name        geometry_type features fields crs_name
+## 1         cp 3D Multi Line String        1     38   WGS 84</code></pre>
 <pre class="r"><code>st_layers(&quot;../data/gps/cp.gpx&quot;)     # contains multiple layers (points, line string, etc.)</code></pre>
 <pre><code>## Driver: GPX 
 ## Available layers:
-##     layer_name     geometry_type features fields
-## 1    waypoints             Point        0     23
-## 2       routes       Line String        0     12
-## 3       tracks Multi Line String        1     13
-## 4 route_points             Point        0     25
-## 5 track_points             Point      951     26</code></pre>
+##     layer_name     geometry_type features fields crs_name
+## 1    waypoints             Point        0     23   WGS 84
+## 2       routes       Line String        0     12   WGS 84
+## 3       tracks Multi Line String        1     13   WGS 84
+## 4 route_points             Point        0     25   WGS 84
+## 5 track_points             Point      951     26   WGS 84</code></pre>
 <pre class="r"><code># run `st_read` to read in the data. Use the ``layer` argument to specify the layer name
 
 tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)</code></pre>
-<pre><code>## Reading layer `tracks&#39; from data source `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\cp.gpx&#39; using driver `GPX&#39;
+<pre><code>## Reading layer `tracks&#39; from data source 
+##   `/Users/kevinl/Documents/GitHub/GIS_workshop/data/gps/cp.gpx&#39; 
+##   using driver `GPX&#39;
 ## Simple feature collection with 1 feature and 13 fields
 ## Geometry type: MULTILINESTRING
 ## Dimension:     XY
@@ -340,7 +388,8 @@ tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)
 ## Geodetic CRS:  WGS 84</code></pre>
 <pre class="r"><code>points &lt;- st_read(&quot;../data/gps/Waypoints_31-MAR-21.gpx&quot;, layer = &quot;waypoints&quot;)</code></pre>
 <pre><code>## Reading layer `waypoints&#39; from data source 
-##   `C:\Users\Kevin\Documents\GitHub\GIS_workshop\data\gps\Waypoints_31-MAR-21.gpx&#39; using driver `GPX&#39;
+##   `/Users/kevinl/Documents/GitHub/GIS_workshop/data/gps/Waypoints_31-MAR-21.gpx&#39; 
+##   using driver `GPX&#39;
 ## Simple feature collection with 2 features and 23 fields
 ## Geometry type: POINT
 ## Dimension:     XY
@@ -348,22 +397,13 @@ tracks &lt;- st_read(&quot;../data/gps/cp.gpx&quot;, layer = &quot;tracks&quot;)
 ## Geodetic CRS:  WGS 84</code></pre>
 <pre class="r"><code># how to get the coordinate information
 points_coord &lt;- st_coordinates(points)</code></pre>
-<p>Alternatively, you can use <code>readGPX</code> from the package <code>plotKML</code></p>
-<pre class="r"><code>tracks2 &lt;- readGPX(&quot;../data/gps/cp.gpx&quot;)
-
-head(tracks2$tracks[[1]]$CP) # in this case, the data are buried in a list of dataframes but it includes the coordinates</code></pre>
-<pre><code>##         lon      lat   ele                 time
-## 1 -66.71755 18.27058 158.4 2021-06-09T12:36:03Z
-## 2 -66.71816 18.27010 157.3 2021-06-09T12:36:08Z
-## 3 -66.71966 18.26899 154.5 2021-06-09T12:36:19Z
-## 4 -66.72008 18.26865 154.0 2021-06-09T12:36:22Z
-## 5 -66.72034 18.26840 153.2 2021-06-09T12:36:24Z
-## 6 -66.72057 18.26814 152.4 2021-06-09T12:36:26Z</code></pre>
 </div>
 <div id="using-qgis-for-gps-import" class="section level3">
 <h3>Using QGIS for GPS import</h3>
 <p>Alternatively, you can use QGIS to import the data.</p>
-<p><a href="https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html" class="uri">https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html</a></p>
+<p><a
+href="https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html"
+class="uri">https://docs.qgis.org/2.8/en/docs/user_manual/working_with_gps/plugins_gps.html</a></p>
 </div>
 </div>
 <div id="making-maps" class="section level2">
@@ -371,12 +411,17 @@ head(tracks2$tracks[[1]]$CP) # in this case, the data are buried in a list of da
 <div id="qgis" class="section level3">
 <h3>QGIS</h3>
 <p>Making maps is probably easiest in QGIS.</p>
-<p>Mapping guide (start at 7): <a href="https://www.qgistutorials.com/en/docs/3/making_a_map.html" class="uri">https://www.qgistutorials.com/en/docs/3/making_a_map.html</a></p>
-<p>Options for basemaps: <a href="https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30" class="uri">https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30</a></p>
+<p>Mapping guide (start at 7): <a
+href="https://www.qgistutorials.com/en/docs/3/making_a_map.html"
+class="uri">https://www.qgistutorials.com/en/docs/3/making_a_map.html</a></p>
+<p>Options for basemaps: <a
+href="https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30"
+class="uri">https://opengislab.com/blog/2018/4/15/add-basemaps-in-qgis-30</a></p>
 </div>
 <div id="r" class="section level3">
 <h3>R</h3>
-<p>If you use <code>sf</code>, you can plot the imported data with the package <code>ggplot2</code>.</p>
+<p>If you use <code>sf</code>, you can plot the imported data with the
+package <code>ggplot2</code>.</p>
 <pre class="r"><code>library(ggplot2)
 
 ggplot(tracks) + geom_sf()</code></pre>
@@ -385,8 +430,11 @@ ggplot(tracks) + geom_sf()</code></pre>
 </div>
 <div id="references" class="section level2">
 <h2>References</h2>
-<p><a href="https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/" class="uri">https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/</a></p>
-<p><a href="https://gisgeography.com/trilateration-triangulation-gps/" class="uri">https://gisgeography.com/trilateration-triangulation-gps/</a></p>
+<p><a
+href="https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/"
+class="uri">https://www.faa.gov/about/office_org/headquarters_offices/ato/service_units/techops/navservices/gnss/gps/howitworks/</a></p>
+<p><a href="https://gisgeography.com/trilateration-triangulation-gps/"
+class="uri">https://gisgeography.com/trilateration-triangulation-gps/</a></p>
 </div>
 
 
