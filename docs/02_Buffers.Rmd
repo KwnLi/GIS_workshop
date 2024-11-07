@@ -8,7 +8,7 @@ output:
 
 ```{r images, echo=FALSE}
 # Define variable containing url
-img1_buffers <- "http://wiki.gis.com/wiki/images/9/9c/BufferExamples.jpg"
+img1_buffers <- "http://web.archive.org/web/20221017145741if_/http://wiki.gis.com/wiki/images/9/9c/BufferExamples.jpg"
 
 img2_Avelino <- "https://drive.google.com/uc?export=view&id=1paWz37FjfCZMgYzteZZISJ0Ks-cx5S8e"
 

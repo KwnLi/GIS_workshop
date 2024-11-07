@@ -24,7 +24,7 @@ We load the point locations of the 25 farms + Casa Pueblo from the geographic co
 
 We plot the points using `ggplot` package and the `geom_sf()` function. We add text labels with the function `geom_sf_text_repel()` (from the `ggsflabel` package), which automatically "repels" the text away from the point and each other, so it looks better. We add a background layer with `annotation_map_tile()` from the `ggspatial()` package.
 
-```{r farm_points, message=FALSE}
+```{r farm_points, message=FALSE, warning=FALSE}
 farms <- read.csv("https://drive.google.com/uc?export=download&id=1dvNtK4ZrTTOdCIiYh9DzIgczzSSPP8yK")
 
 head(farms)
