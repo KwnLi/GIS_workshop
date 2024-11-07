@@ -12,29 +12,29 @@ img1_buffers <- "https://raw.githubusercontent.com/KwnLi/GIS_workshop/refs/heads
 
 img2_Avelino <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/Avelinoetal2012.jpg?raw=true"
 
-img3_landcover <- "https://drive.google.com/uc?export=view&id=1pb-YLRV4TOHk5F5KD-bSTqMdUxJwkAdl"
+img3_landcover <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/Land_cover_mapping_using_TM_images.jpg?raw=true"
 
-img4_veglayers <- "https://drive.google.com/uc?export=view&id=1pp2RkdDiMXk-GT5GuBXKS5meGdogEHu9"
+img4_veglayers <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/vegdatadescriptions.PNG?raw=true"
 
-img5_datasrcmngr <- "https://drive.google.com/uc?export=view&id=1pyRPXxfQYRVgMIOQBn7aeAm2xalo73eJ"
+img5_datasrcmngr <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/OpenDataSourceMngr.PNG?raw=true"
 
-img6_windatasrcmngr <- "https://drive.google.com/uc?export=view&id=1q5STdCGDngJ5qyX8d8U8sxeDPRk_vOM0"
+img6_windatasrcmngr <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/DataSourceMngr.PNG?raw=true"
 
-img7_savelayer <- "https://drive.google.com/uc?export=view&id=1qCKZQWc6cGulk_PEefp90-PY8HInyokw"
+img7_savelayer <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/SaveLayerAs.PNG?raw=true"
 
-img8_menubuffer <- "https://drive.google.com/uc?export=view&id=1qVYfzRirx2fKf4H1wz2eHl_ajDA7jcKC"
+img8_menubuffer <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/menuBuffer.PNG?raw=true"
 
-img9_winbuffer <- "https://drive.google.com/uc?export=view&id=1qaEmKZ1AQ14c4enhZ_PMARaZxmxs5nnw"
+img9_winbuffer <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/winBuffer.PNG?raw=true"
 
-img10_prbw <- "https://drive.google.com/uc?export=view&id=1qqNOY6sibqg7OCmxJbOI1YN87giYDhBm"
+img10_prbw <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/PR_bw.PNG?raw=true"
 
-img11_winattb <- "https://drive.google.com/uc?export=view&id=1qqU8SO5F8dOEgqnRQTEJfnEqlQ40Vod_"
+img11_winattb <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/winAttribute.PNG?raw=true"
 
-img12_prcol <- "https://drive.google.com/uc?export=view&id=1qr2mka-AzKeX3Oth53AnhUGlXTKCF8mi"
+img12_prcol <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/PR_col.PNG?raw=true"
 
-img13_winzon <- "https://drive.google.com/uc?export=view&id=1qyoZRDm8UkuZcSkWswVWGuvHQFAmC5ME"
+img13_winzon <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/winZonal.PNG?raw=true"
 
-img14_winqgis <- "https://drive.google.com/uc?export=view&id=1r19cbSqKBDny34syZs33ejOTapvcf8Pf"
+img14_winqgis <- "https://github.com/KwnLi/GIS_workshop/blob/main/images/winQGIS.PNG?raw=true"
 
 ```
 

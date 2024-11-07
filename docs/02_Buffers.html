@@ -363,7 +363,7 @@ analysis.</p>
 using algorithms, or could be done manually by identifying and drawing
 boundaries of different land covers by hand.</p>
 <center>
-<img src="https://drive.google.com/uc?export=view&id=1pb-YLRV4TOHk5F5KD-bSTqMdUxJwkAdl">
+<img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/Land_cover_mapping_using_TM_images.jpg?raw=true">
 </center>
 <p><strong>Figure 3</strong> Illustration of the process of creating
 land cover data. In this case, the land cover data is derived from
@@ -440,7 +440,7 @@ be of interest (from the pdf above):</p>
 <p><strong>Table 1</strong> Vegetation layers available in the LANDFIRE
 dataset.</p>
 <center>
-<img src="https://drive.google.com/uc?export=view&id=1pp2RkdDiMXk-GT5GuBXKS5meGdogEHu9">
+<img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/vegdatadescriptions.PNG?raw=true">
 </center>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
@@ -453,14 +453,14 @@ buffers around. Our first step needs to be to load these coordinates
 into QGIS by converting them to point data.</p>
 <p>Here’s a basic overview of the QGIS program window, highlighting some
 of the areas we are using in this workshop.</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1r19cbSqKBDny34syZs33ejOTapvcf8Pf"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/winQGIS.PNG?raw=true"></left></p>
 <div id="a.-open-a-new-project-in-qgis." class="section level4">
 <h4>a. Open a new project in QGIS.</h4>
 </div>
 <div id="b.-open-the-data-source-manager" class="section level4">
 <h4>b. Open the “Data Source Manager”</h4>
 <p>It looks like this:</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1pyRPXxfQYRVgMIOQBn7aeAm2xalo73eJ"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/OpenDataSourceMngr.PNG?raw=true"></left></p>
 </div>
 <div
 id="c.-choose-delimited-text-in-the-vertical-bar-to-the-left-to-load-the-farm-coordinate-file"
@@ -476,7 +476,7 @@ This is specific to these coordinates and will not always work for all
 data! See the GPS workshop for more information about coordinate
 systems.</p>
 <p>Click <strong>Add</strong> and then <strong>Close</strong></p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1q5STdCGDngJ5qyX8d8U8sxeDPRk_vOM0"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/DataSourceMngr.PNG?raw=true"></left></p>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 <p>The layer will be shown on the viewing window. However, this is a
 temporary layer. In order to do analysis on it you must save it.</p>
@@ -497,7 +497,7 @@ system.</strong> Click the button next to the <strong>CRS</strong>
 section to bring up the “Coordinate Reference System Selector”. Use the
 <strong>Filter</strong> function to search for a <em>projected</em>
 coordinate system for Puerto Rico (search for Puerto Rico).</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qCKZQWc6cGulk_PEefp90-PY8HInyokw"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/SaveLayerAs.PNG?raw=true"></left></p>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
 </div>
@@ -507,7 +507,7 @@ coordinate system for Puerto Rico (search for Puerto Rico).</p>
 <h4>a. Open the Buffer window</h4>
 <p>Under the <strong>Vector</strong> menu on the top menu bar, select
 <strong>Geoprocessing Tools &gt; Buffer</strong></p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qVYfzRirx2fKf4H1wz2eHl_ajDA7jcKC"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/menuBuffer.PNG?raw=true"></left></p>
 </div>
 <div id="b.-create-a-buffer-around-the-farm-points-layer"
 class="section level4">
@@ -523,7 +523,7 @@ buffer will be approximated by a 20-sided polygon.</p>
 <p><strong><em>Note:</em></strong> You can use <strong>Run as Batch
 Process…</strong> if you want to repeatedly run this buffer tool
 (e.g. to repeat the buffer at different distances).</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qaEmKZ1AQ14c4enhZ_PMARaZxmxs5nnw"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/winBuffer.PNG?raw=true"></left></p>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
 </div>
@@ -546,7 +546,7 @@ class="section level4">
 grayscale. This is because QGIS does not know that the data in the
 raster layer represent categories of land cover rather than continuous
 values.</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qqNOY6sibqg7OCmxJbOI1YN87giYDhBm"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/PR_bw.PNG?raw=true"></left></p>
 <p>The color display information, as well as the definitions for the
 land cover codes are actually stored within the raster data for this
 format (GeoTIFF). However, you have to install a plugin
@@ -565,8 +565,8 @@ the <strong>Classify</strong> button in the upper right corner. This
 will change the colors of the land cover layer. The colors of the
 categories are also shown as the background of the leftmost column of
 the attribute table.</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qqU8SO5F8dOEgqnRQTEJfnEqlQ40Vod_"></left></p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qr2mka-AzKeX3Oth53AnhUGlXTKCF8mi"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/winAttribute.PNG?raw=true"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/PR_col.PNG?raw=true"></left></p>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
 </div>
@@ -592,7 +592,7 @@ each land cover type.</p>
 <p><strong><em>Note:</em></strong> As with the buffer tool, you can use
 <strong>Run as Batch Process…</strong> if you want to repeatedly run the
 tool (e.g. to repeat the extraction for multiple buffers).</p>
-<p><left><img src="https://drive.google.com/uc?export=view&id=1qyoZRDm8UkuZcSkWswVWGuvHQFAmC5ME"></left></p>
+<p><left><img src="https://github.com/KwnLi/GIS_workshop/blob/main/images/winZonal.PNG?raw=true"></left></p>
 <p><span class="math display">\[\\[0.1cm]\]</span></p>
 </div>
 <div id="b.-export-data-to-excel" class="section level4">
